@@ -41,7 +41,7 @@ pip install -r requirements.txt
 Запустити програму: 
 Для запуску проєкту використовуйте команду:
 ```bash
-python main.py
+python SET_Starikov_Final_project\Starikov_Final_Prj.py
 ```
 Програма відкриє головне меню з кількома опціями:
 
