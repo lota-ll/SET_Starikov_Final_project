@@ -14,6 +14,7 @@ except FileNotFoundError:
 
 cipher = Fernet(key)
 
+
 def generate_password(length=12):
     """
     Генерує складний пароль заданої довжини.
@@ -35,7 +36,7 @@ def generate_password(length=12):
         random.choice(lowercase),
         random.choice(uppercase),
         random.choice(digits),
-        random.choice(special_chars)
+        random.choice(special_chars),
     ]
 
     # Заповнимо решту довжини випадковими символами з усіх наборів
@@ -45,7 +46,8 @@ def generate_password(length=12):
     # Перемішаємо пароль, щоб уникнути передбачуваності
     random.shuffle(password)
 
-    return ''.join(password)
+    return "".join(password)
+
 
 def save_password_to_file(password, service, filename="passwords.txt"):
     """
@@ -58,6 +60,7 @@ def save_password_to_file(password, service, filename="passwords.txt"):
     with open(filename, "a") as file:
         file.write(f"{service}: {password}\n")
     print(f"Пароль для {service} збережено у файл {filename}.")
+
 
 def view_saved_passwords(filename="passwords.txt"):
     """
@@ -73,6 +76,7 @@ def view_saved_passwords(filename="passwords.txt"):
     except FileNotFoundError:
         print("Файл з паролями не знайдено.")
 
+
 def save_password(service, password, filename="encrypted_passwords.txt"):
     """
     Функція для шифрування і збереження пароля.
@@ -81,12 +85,13 @@ def save_password(service, password, filename="encrypted_passwords.txt"):
     :param password: Пароль для збереження.
     :param filename: Ім'я файлу для збереження.
     """
-    salt = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+    salt = "".join(random.choices(string.ascii_letters + string.digits, k=16))
     salted_password = salt + password
     encrypted_password = cipher.encrypt(salted_password.encode())
     with open(filename, "a") as file:
         file.write(f"{service}: {salt}:{encrypted_password.decode()}\n")
     print(f"Пароль для {service} успішно зашифровано і збережено.")
+
 
 def load_passwords(filename="encrypted_passwords.txt"):
     """
@@ -100,13 +105,16 @@ def load_passwords(filename="encrypted_passwords.txt"):
             for line in file:
                 service, data = line.strip().split(": ")
                 salt, encrypted_password = data.split(":")
-                decrypted_password = cipher.decrypt(encrypted_password.encode()).decode()
-                original_password = decrypted_password[len(salt):]
+                decrypted_password = cipher.decrypt(
+                    encrypted_password.encode()
+                ).decode()
+                original_password = decrypted_password[len(salt) :]
                 print(f"{service}: {original_password}")
     except FileNotFoundError:
         print("Файл із зашифрованими паролями не знайдено.")
     except Exception as e:
         print(f"Помилка при декодуванні: {e}")
+
 
 def main_menu():
     """
@@ -147,6 +155,7 @@ def main_menu():
             break
         else:
             print("Невірний вибір. Спробуйте ще раз.")
+
 
 # Приклад використання
 if __name__ == "__main__":
